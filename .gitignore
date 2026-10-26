@@ -1,0 +1,6 @@
+# Publish only reviewed website files. Personal backups and credentials are excluded.
+*
+!.gitignore
+!.nojekyll
+!index.html
+!README.md
