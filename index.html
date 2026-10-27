@@ -14,6 +14,8 @@
 
 input,select,textarea{max-width:100%;min-width:0}.setup .field{max-width:100%}.quickform>*{min-width:0}.logitem{overflow-wrap:anywhere}
 </style>
+<link rel="stylesheet" href="./health.css">
+<script src="./health-data.js"></script>
 </head>
 <body>
 <header class="top"><div class="wrap"><div class="heading"><div><div class="eyebrow">OUR LITTLE DAILY ROUTINE · 0—12 MONTHS</div><h1>우리 아기 케어보드 <span aria-hidden="true">🌱</span></h1><p class="lede">수유 · 수면 · 기저귀 · 터미타임 · 성장과 검진 일정을 한곳에서 관리해요. 시간표는 예시이며 아기의 신호가 우선입니다.</p></div><div class="star" aria-hidden="true">✳</div></div><div class="setup"><label class="field">아기 생년월일<input id="birthday" type="date" value=""></label><label class="field">기록 날짜<input id="recorddate" type="date"></label><label class="field">수유 방식<select id="feedmode"><option value="mixed">혼합 수유</option><option value="breast">모유 수유</option><option value="formula">분유 수유</option></select></label><span class="pill" id="agepill">월령 계산 중</span></div></div></header>
@@ -65,10 +67,12 @@ $('#agechips').addEventListener('click',e=>{const btn=e.target.closest('[data-ag
 $('#quickform').addEventListener('submit',e=>{e.preventDefault();const type=$('#eventtype').value,time=$('#eventtime').value,amount=$('#amount').value,memo=$('#memo').value.trim();if(!time)return;if(['formula','expressed'].includes(type)&&amount!==''&&Number(amount)<=0){alert((type==='expressed'?'유축 수유량':'분유량')+'은 0보다 큰 값으로 입력하세요.');return}if(type==='tummy'&&amount!==''&&Number(amount)<=0){alert('터미타임 시간은 0보다 큰 값으로 입력하세요.');return}state.events.push({id:String(Date.now())+Math.random().toString(36).slice(2,7),date:weekDate(),time,type,amount:amount===''?null:Number(amount),memo});save();$('#amount').value='';$('#memo').value='';$('#eventtime').value=new Date().toTimeString().slice(0,5);renderStats();renderLogs();alert('기록을 저장했습니다.')});
 $('#logs').addEventListener('click',e=>{const el=e.target.closest('[data-delete]');if(!el)return;if(confirm('이 기록을 삭제하시겠습니까?')){state.events=state.events.filter(x=>x.id!==el.dataset.delete);save();renderStats();renderLogs()}});
 function backup(){const payload={format:'babydaily-v1',exportedAt:new Date().toISOString(),data:state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='baby-care-backup-'+TODAY()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}$('#export').addEventListener('click',backup);$('#backup2').addEventListener('click',backup);$('#print').addEventListener('click',()=>window.print());
-$('#import').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>5e6)throw Error('5MB 이하 파일만 지원합니다.');const o=JSON.parse(await f.text());if(o.format!=='babydaily-v1'||!o.data||!Array.isArray(o.data.events))throw Error('지원하지 않는 백업 파일입니다.');if(!confirm('현재 저장된 육아 기록을 백업 내용으로 교체하시겠습니까?'))return;state={birthday:o.data.birthday||'',feedmode:o.data.feedmode||'mixed',events:o.data.events.filter(v=>v&&typeof v.date==='string'&&typeof v.time==='string'&&typeof v.type==='string'),checks:o.data.checks||{},weekchecks:o.data.weekchecks||{}};save();$('#birthday').value=state.birthday;$('#feedmode').value=state.feedmode;activeAge=null;render();alert('백업을 불러왔습니다.')}catch(err){alert('불러오기 실패: '+err.message)}finally{e.target.value=''}});
+$('#import').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>5e6)throw Error('5MB 이하 파일만 지원합니다.');const o=JSON.parse(await f.text());if(o.format!=='babydaily-v1'||!o.data||!Array.isArray(o.data.events))throw Error('지원하지 않는 백업 파일입니다.');window.validateCareData(o.data);if(!confirm('현재 저장된 육아 기록을 백업 내용으로 교체하시겠습니까? 사진·측정 기록은 유지됩니다.'))return;const restored=window.validateCareData(o.data);localStorage.setItem(KEY,JSON.stringify(restored));state=restored;$('#birthday').value=state.birthday;$('#feedmode').value=state.feedmode;activeAge=null;render();alert('백업을 불러왔습니다.')}catch(err){alert('불러오기 실패: '+err.message)}finally{e.target.value=''}});
 $('#eventtype').addEventListener('change',e=>{$('#amount').placeholder=['formula','expressed'].includes(e.target.value)?'mL':e.target.value==='tummy'?'분':'선택'});
+window.careBoard={validate:window.validateCareData,getState:()=>structuredClone(state),apply:data=>{state=window.validateCareData(data);$('#birthday').value=state.birthday;$('#feedmode').value=state.feedmode;activeAge=null;render()}};
 render();
 })();
 </script>
+<script src="./health.js" defer></script>
 </body>
 </html>

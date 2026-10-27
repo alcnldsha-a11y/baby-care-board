@@ -1,0 +1,7 @@
+/* Strict legacy-compatible care-record validation, shared by JSON and ZIP restore. */
+(()=>{'use strict';
+const date=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&!isNaN(Date.parse(s))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s;
+const plain=o=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.getPrototypeOf(o)===Object.prototype;
+function checks(o){if(!plain(o)||Object.keys(o).length>100000)throw Error('잘못된 체크 기록');for(const [k,v]of Object.entries(o))if(!/^\d{4}-\d{2}-\d{2}:(daily|time|week):\d+$/.test(k)||!date(k.slice(0,10))||typeof v!=='boolean')throw Error('잘못된 체크 항목');return {...o};}
+window.validateCareData=function(s){if(!plain(s)||typeof s.birthday!=='string'||(s.birthday&&!date(s.birthday))||!['mixed','breast','formula'].includes(s.feedmode)||!Array.isArray(s.events)||s.events.length>100000)throw Error('잘못된 육아 백업 데이터');const ids=new Set(),types=['breast','formula','expressed','wet','dirty','tummy','sleep','wake'];const events=s.events.map(e=>{if(!plain(e)||typeof e.id!=='string'||!e.id||e.id.length>100||ids.has(e.id)||!date(e.date)||typeof e.time!=='string'||!/^([01]\d|2[0-3]):[0-5]\d$/.test(e.time)||!types.includes(e.type)||!(e.amount===null||(typeof e.amount==='number'&&Number.isFinite(e.amount)&&e.amount>=0&&e.amount<=1000))||typeof e.memo!=='string'||e.memo.length>2000)throw Error('잘못된 육아 기록 항목');ids.add(e.id);return {id:e.id,date:e.date,time:e.time,type:e.type,amount:e.amount,memo:e.memo}});return {birthday:s.birthday,feedmode:s.feedmode,events,checks:checks(s.checks),weekchecks:checks(s.weekchecks)};};
+})();
