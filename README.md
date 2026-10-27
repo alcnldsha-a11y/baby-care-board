@@ -1,6 +1,6 @@
-# sayoon24
+# 우리 아기 케어보드
 
-GitHub Pages로 배포할 정적 육아 관리 웹사이트입니다. 배포 주소: https://alcnldsha-a11y.github.io/baby-care-board/
+GitHub Pages로 배포할 정적 육아 관리 웹사이트입니다. 배포 주소: https://alcnldsha-a11y.github.io/sayoon24/
 
 ## 개인정보와 저장 방식
 
@@ -8,7 +8,7 @@ GitHub Pages로 배포할 정적 육아 관리 웹사이트입니다. 배포 주
 
 ## 최초 배포
 
-사용자 승인과 GitHub 인증 후 새 공개 저장소 baby-care-board를 생성하고 이 폴더의 검토된 파일만 업로드합니다. 기존 저장소가 있으면 덮어쓰지 않습니다.
+사용자 승인과 GitHub 인증 후 공개 저장소 sayoon24를 사용하고 이 폴더의 검토된 파일만 업로드합니다. 기존 저장소가 있으면 덮어쓰지 않습니다.
 
 Settings → Pages → Deploy from a branch → main → /(root) → Save로 설정합니다.
 
