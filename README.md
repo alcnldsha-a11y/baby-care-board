@@ -1,4 +1,4 @@
-# 우리 아기 케어보드
+# sayoon24
 
 GitHub Pages로 배포할 정적 육아 관리 웹사이트입니다. 배포 주소: https://alcnldsha-a11y.github.io/baby-care-board/
 
