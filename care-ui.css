@@ -3,3 +3,4 @@
 @media print{.care-settings,.today-quick,.quick-sheet{display:none!important}}
 #photo-upload>.photo-picker{grid-column:auto;padding:6px;min-width:0}#photo-upload>.photo-picker .button{width:100%;font-size:13px;min-height:44px;padding:8px 4px}
 .photo-picker{position:relative}.photo-picker input.sr{width:1px;max-width:1px;min-width:0;min-height:0;height:1px;position:absolute;left:0;top:0;clip:rect(0,0,0,0)}
+.record-date-error{display:block;color:#8b4637;font-size:12px;margin-top:5px}#record-date-warning[hidden]{display:none!important}#week .source{margin-top:10px;overflow-wrap:anywhere}.birth-preparation[hidden]{display:none!important}
