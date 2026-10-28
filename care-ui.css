@@ -5,3 +5,4 @@
 .photo-picker{position:relative}.photo-picker input.sr{width:1px;max-width:1px;min-width:0;min-height:0;height:1px;position:absolute;left:0;top:0;clip:rect(0,0,0,0)}
 .record-date-error{display:block;color:#8b4637;font-size:12px;margin-top:5px}#record-date-warning[hidden]{display:none!important}#week .source{margin-top:10px;overflow-wrap:anywhere}.birth-preparation[hidden]{display:none!important}
 #confirm-birth{margin:0 12px 12px;min-height:44px}#confirm-birth[hidden]{display:none!important}
+#care-summary{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.6}#birth-required-dialog p{font-size:14px;line-height:1.7}#birth-required-dialog .actionrow{gap:8px;margin-top:16px}
